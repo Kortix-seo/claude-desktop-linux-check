@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://kortix.com/schema/kortix.v2.schema.json
+#
+# A Kortix project whose one agent runs this repo's pre-flight check on its own
+# cloud computer and reports what that machine has. It exists to show the other
+# arm of the fork in the README: when the host in front of you cannot pass
+# Anthropic's five requirements, the work moves to a machine that is not your
+# own, and the check runs there instead.
+#
+# Deny-by-default: the agent gets a shell and the repo, no connectors and no
+# secrets, because reading /proc, /sys and /dev needs neither.
+kortix_version: 2
+default_agent: linux-check
+
+project:
+  name: claude-desktop-linux-check
+
+env:
+  required: []
+  optional: []
+
+tools:
+  web_search: kortix:web_search
+
+agents:
+  linux-check:
+    file: agents/linux-check.md
+    connectors: none
+    secrets: none
+    kortix_permissions: none
+    skills: none
+    tools: [bash, read, glob, grep, web_search]
+    workspace: { project_repository: true }
