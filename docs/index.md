@@ -58,6 +58,8 @@ user can open it read-write, and whether the user is in the `kvm` group, which i
 open fails when it does.
 
 Fix: `sudo usermod -aG kvm $USER`, then log out and back in, since group membership is read at login.
+The [KVM walkthrough](https://claudedesktoplinux.com/cowork-linux-kvm) has the same steps in order for
+Ubuntu and Debian, with what the app prints when one of them is still missing.
 
 ## The notes
 
@@ -74,7 +76,9 @@ Fix: `sudo usermod -aG kvm $USER`, then log out and back in, since group members
 **A container.** The script reports what the container was given, not what the host has. A container
 started with `--device=/dev/kvm --device=/dev/vhost-vsock` on a host that passes its own checks will pass
 too; one started without them fails however many packages you install inside. Run the script on the host
-when the question is about the host.
+when the question is about the host. [The container, ChromeOS and server cases](https://claudedesktoplinux.com/containers-chromeos-servers)
+take this further: which parts of the desktop app survive in a container, and what the vsock requirement
+means when the kernel has no module directory at all.
 
 **ChromeOS and other hosts whose kernel ships no module directory.** Anthropic names this combination
 directly. There is no package to install, because what is missing is the kernel's own support for the
