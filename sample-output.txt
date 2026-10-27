@@ -1,0 +1,33 @@
+# Published by Kortix, the open-source AI Operating System.
+# Real run, produced by preflight.py on 2026-10-27 inside a Debian 12 x86_64 container
+# that was not given /dev/kvm or /dev/vhost-vsock. Reproduce: python3 preflight.py
+
+
+Claude Desktop for Linux, pre-flight
+========================================
+
+distro          PASS  Debian GNU/Linux 12 (bookworm) (x86_64)  (not one of the five)
+virtualization  PASS  CPU reports svm (hardware virtualization exposed)
+kvm_device      FAIL  /dev/kvm is missing
+                      fix: Load the KVM module (sudo modprobe kvm_intel or kvm_amd). If /dev/kvm still does not appear you are inside a container or a guest that was not given it.
+kvm_group       note  no kvm group on this host  (not one of the five)
+                      fix: sudo usermod -aG kvm $USER, then log out and back in.
+qemu            FAIL  no qemu-system-* on PATH
+                      fix: Install QEMU for your architecture (Debian and Ubuntu: qemu-system-x86).
+firmware        FAIL  no OVMF or edk2 firmware found under /usr/share
+                      fix: Install UEFI firmware for QEMU (Debian and Ubuntu: ovmf; Fedora: edk2-ovmf).
+virtiofsd       note  no virtiofsd on PATH (on Ubuntu 22.04 the app uses a bundled copy, so this alone is not a blocker there)  (not one of the five)
+                      fix: Install virtiofsd. Ubuntu 22.04 has no package for it and the app carries its own copy there.
+vsock           FAIL  /dev/vhost-vsock is missing
+                      fix: The app needs /dev/vhost-vsock, which only kvm group members can open. If the device is missing, load the module (sudo modprobe vmw_vsock_virtio_transport) and check that your kernel ships vsock: no /lib/modules/<release> directory means it does not.
+modules         PASS  /lib/modules/6.8.0-88-generic present  (not one of the five)
+bubblewrap      note  no bwrap on PATH (only relevant to the opt-in COWORK_VM_BACKEND=bwrap path in the repackaged build)  (not one of the five)
+
+1 of 5 requirements met. Missing: kvm_device, qemu, firmware, vsock.
+Cowork will not start its virtual machine on this host until those pass. The desktop app's
+chat still runs natively; only the work that needs a VM is blocked.
+
+If the host cannot pass them, the other route is an agent that runs on a cloud
+computer in the browser, with nothing to virtualise locally: https://kortix.com
+
+exit code: 1
