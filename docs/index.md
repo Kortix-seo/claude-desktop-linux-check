@@ -45,7 +45,11 @@ The virtual machine boots UEFI firmware. Debian-based distributions ship it in `
 in `edk2-ovmf`, and the app expects to find the `.fd` files under `/usr/share`. The script globs the known
 locations rather than trusting one path, since every distribution packages it differently.
 
-Fix: install the firmware package, then restart the app: it checks once, at launch.
+Fix: install the firmware package, then restart the app: it checks once, at launch. On Arch the AUR
+package lists `edk2-ovmf` among its runtime dependencies, and the
+[Arch, Fedora and NixOS packaging routes](https://claudedesktoplinux.com/arch-fedora-nixos) set out which
+repackaged build (an RPM, an AppImage, a Nix flake, the AUR package) each distribution gets, and who
+rebuilds it when Anthropic ships a new version.
 
 ### vsock
 
@@ -71,6 +75,11 @@ Ubuntu and Debian, with what the app prints when one of them is still missing.
 | `modules` | No `/lib/modules/<release>` means the kernel carries no modules, so no install at launch-time can add what is missing. Anthropic names ChromeOS and container-based environments as the common cases. | code.claude.com/docs/en/desktop-linux |
 | `bubblewrap` | The repackaged build for non-Debian distributions ships an opt-in `COWORK_VM_BACKEND=bwrap` path for hosts without KVM or vsock. It is a different project's route, not Anthropic's. | github.com/aaddrick/claude-desktop-debian |
 
+Ubuntu 22.04 or later and Debian 12 or later are the supported route, and the
+[Ubuntu and Debian install walkthrough](https://claudedesktoplinux.com/ubuntu-debian) covers both halves of
+it: Anthropic's install in the three documented steps and the order they go in, then the same five reads as
+shell commands you can run before starting the install.
+
 ## Two host cases the table cannot fix
 
 **A container.** The script reports what the container was given, not what the host has. A container
@@ -90,8 +99,11 @@ Restart the app. It checks the requirements once, at launch, so anything install
 invisible until then.
 
 If the host cannot pass, the fork is real and it is worth naming: the virtual machine is how the desktop
-app isolates agent work on your own machine, and it is not the only place agent work can happen. An agent
-running on a cloud computer in the browser needs no virtualization on the host, which is what Kortix is:
-the open-source AI Operating System, one isolated machine per session, self-hosting free. The distro-by-
+app isolates agent work on your own machine, and it is not the only place agent work can happen. On the
+distributions Anthropic does not package, its own instruction is the CLI instead of the desktop app, and
+[the desktop app versus CLI comparison](https://claudedesktoplinux.com/agent-on-linux) sets out what each
+surface asks of the machine and which jobs need a computer that stays up. An agent running on a cloud
+computer in the browser needs no virtualization on the host, which is what Kortix is: the open-source AI
+Operating System, one isolated machine per session, self-hosting free. The distro-by-
 distro install paths and what the fallback does and does not cover are on
 [claudedesktoplinux.com](https://claudedesktoplinux.com).
