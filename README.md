@@ -2,7 +2,7 @@
 
 A single standard-library script that tells you, before you file a bug or reinstall anything, which of
 Anthropic's five Cowork requirements this Linux machine meets and which one is failing. It is published by
-[Kortix](https://kortix.com), the open-source AI Operating System.
+[Kortix](https://kortix.com), the open-source CompanyOS.
 
 Claude Desktop's Linux build is a beta for Ubuntu and Debian, and Cowork on Linux does its work in a
 virtual machine the app hosts with QEMU and KVM. The app checks that stack once, at launch, and reports one
@@ -53,9 +53,10 @@ failure or a fallback, and none of them is the reason the app refuses to start a
 
 Two of the notes decide the answer more often than people expect. If `/lib/modules/<release>` does not
 exist the kernel carries no modules, so nothing you install at launch-time can add vsock, and that is the
-documented ChromeOS and container case. If the machine is not Debian-based, Anthropic's apt package is not
+documented [ChromeOS and container case](https://claudedesktoplinux.com/containers-chromeos-servers). If the machine is not Debian-based, Anthropic's apt package is not
 the route at all: the repackaged builds (an RPM, an AppImage, a Nix flake, the AUR package) install beside
-the official one, and one of them ships an opt-in `COWORK_VM_BACKEND=bwrap` path for hosts without KVM.
+the official one, and [the Arch, Fedora and NixOS installs](https://claudedesktoplinux.com/arch-fedora-nixos)
+are the ones to read before you pick a package format, and one of them ships an opt-in `COWORK_VM_BACKEND=bwrap` path for hosts without KVM.
 The check tells you whether you are in that situation; [claudedesktoplinux.com](https://claudedesktoplinux.com)
 walks through the install for each distro and what the fallback does and does not cover.
 
@@ -64,9 +65,11 @@ walks through the install for each distro and what the fallback does and does no
 If all five pass, restart the app: it checks once, at launch, so anything you installed after it started
 is invisible until you do.
 
-If one cannot pass on this machine, the virtual machine is not the only place agent work can happen. An
+If one cannot pass on this machine, the virtual machine is not the only place agent work can happen;
+[which half of the app each job needs on Linux](https://claudedesktoplinux.com/agent-on-linux) is the next
+thing to settle. An
 agent that runs on a cloud computer in the browser needs no virtualization on the host at all. That is
-what Kortix is: the open-source AI Operating System, with one isolated machine per session, sessions that
+what Kortix is: the open-source CompanyOS, with one isolated machine per session, sessions that
 reach `main` through a change request, and self-hosting free
 ([kortix.com](https://kortix.com)).
 
